@@ -1,6 +1,8 @@
 function createClass (superClass, instanceProps, classProps) {
   function c () {
-    this.init.apply(this, arguments);
+    if (this.init) {
+      this.init.apply(this, arguments);  
+    }
   }
 
   if (superClass) {
@@ -10,16 +12,10 @@ function createClass (superClass, instanceProps, classProps) {
   } 
 
   _.extend(c.prototype, instanceProps);
-  _.extend(c, classProps); // add class properties
 
+  if (classProps) {
+    _.extend(c, classProps); // add class properties  
+  }
+  
   return c;
 }
-
-
-
-
-
-
-
-
-
