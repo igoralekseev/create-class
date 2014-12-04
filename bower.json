@@ -1,0 +1,14 @@
+{
+  "name": "create-class",
+  "version": "0.0.1",
+  "main": "create-class.js",
+  "ignore": [
+    ".jshintrc",
+    "**/*.txt"
+  ],
+  "dependencies": {
+    "lodash": ">=1.0.0"
+  },
+  "devDependencies": {
+  }
+}
