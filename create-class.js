@@ -11,8 +11,10 @@ function createClass (superClass, instanceProps, classProps) {
     _.extend(c, superClass); // add class properties from superClass
   } 
 
-  _.extend(c.prototype, instanceProps);
-
+  if (instanceProps) {
+    _.extend(c.prototype, instanceProps);  
+  }
+  
   if (classProps) {
     _.extend(c, classProps); // add class properties  
   }
