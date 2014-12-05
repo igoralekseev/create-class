@@ -1,7 +1,7 @@
 function createClass (superClass, instanceProps, classProps) {
   function c () {
     if (this.init) {
-      this.init.apply(this, arguments);  
+      return this.init.apply(this, arguments);  
     }
   }
 
