@@ -5,19 +5,28 @@ function createClass (superClass, instanceProps, classProps) {
     }
   }
 
+  c.extend = function (instanceProps) {
+    _.extend(c.prototype, instanceProps);
+  };
+
+  c.extendClass = function (classProps) {
+    _.extend(c, classProps);
+  };
+
   if (superClass) {
     c.prototype = Object.create(superClass.prototype);
     c.prototype._super = superClass.prototype;
-    _.extend(c, superClass); // add class properties from superClass
+    c.extendClass(superClass); // add class properties from superClass
   } 
 
   if (instanceProps) {
-    _.extend(c.prototype, instanceProps);  
+    c.extend(instanceProps);  
   }
   
   if (classProps) {
-    _.extend(c, classProps); // add class properties  
+    c.extendClass(classProps); // add class properties  
   }
   
+
   return c;
 }
