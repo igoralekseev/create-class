@@ -1,7 +1,7 @@
 create-class
 ============
 
-super simple helper to create classes, depends on lodash 1.0.0
+super simple helper to create classes, no dependencies
 
 
 ```javascript
