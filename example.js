@@ -1,4 +1,5 @@
-var Model = createClass(null, {
+
+var Model = createClass('Model', null, {
   // constructor
   init: function () { 
     console.log('constructor of Model', arguments);
@@ -16,19 +17,24 @@ var Model = createClass(null, {
 }, {
   // class methods
   all: function () {
-    console.log('all! from model', this);
+    console.log('all from model', this);
   },
 
   at: function () {
-    console.log('at! from model', this);
+    console.log('at from model', this);
+  },
+
+  createSpecial: function () {
+    return new this();
   }
 });
 
 
 
-var Table = createClass(Model, { 
+var Table = createClass('Table', Model, { 
   // constructor
   init: function () {
+    this._super.init.apply(this, arguments);
     console.log('constructor of Table', arguments);
   },
 
@@ -40,7 +46,7 @@ var Table = createClass(Model, {
 }, { 
   // class methods 
   at: function () {
-    console.log('at! from Table', this);
+    console.log('at from Table', this);
   },
 
   findByPlayer: function () {}
@@ -51,6 +57,26 @@ Table.all();
 Table.at(0);
 Table.findByPlayer();
 
-t = new Table();
+var t = new Table();
 t.data();
 t.empty();
+
+console.log('create special', Model.createSpecial());
+
+
+
+var Singleton = createClass(null, null, {
+  init: function () {
+    if (this.constructor.instance)
+      return this.constructor.instance;
+    this.constructor.instance = this;
+  }
+});
+
+var s1 = new Singleton();
+var s2 = new Singleton();
+console.log('Singleton', s1 == s2);
+
+
+
+
