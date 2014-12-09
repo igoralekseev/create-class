@@ -9,8 +9,8 @@ var Model = createClass(null, {
     console.log('data from model', this);
   },
 
-  empty: function () {
-    console.log('empty from model', this);  
+  test: function () {
+    console.log('test from Model');
   }
 
 }, {
@@ -30,12 +30,14 @@ var Table = createClass(Model, {
   // constructor
   init: function () {
     console.log('constructor of Table', arguments);
+    // this._super.init.apply(this, arguments); //parent constructor
   },
 
   // instance methods 
   test: function () {
     console.log('test from table', this);
-    this._super.test.apply(this, arguments);
+    this._super.test.apply(this, arguments); // execute parent method
+    // this._super.test.call(this, arg1, arg2);
   }
 }, { 
   // class methods 
@@ -47,10 +49,12 @@ var Table = createClass(Model, {
 });
 
 
-Table.all();
-Table.at(0);
-Table.findByPlayer();
+Table.all(); // parent class method 
+Table.at(0); // overriden parent class method 
+Table.findByPlayer(); // class method
 
-t = new Table();
-t.data();
-t.empty();
+t = new Table(); // create instance
+t.data(); // parent method
+t.test(); // overriden method
+
+
