@@ -6,8 +6,7 @@
     ".jshintrc",
     "**/*.txt"
   ],
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
   }
 }
