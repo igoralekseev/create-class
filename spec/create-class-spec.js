@@ -94,7 +94,7 @@ describe("createClass", function() {
 
     it('calls constructor', function() {
       var m = new Model();
-      expect(modelInstanceMethods.init).toHaveBeenCalled();
+      expect(modelInstanceMethods.init.calls.count()).toEqual(1);
       // check context
       expect(modelInstanceMethods.init.calls.first().object).toEqual(m); 
     });
@@ -107,14 +107,14 @@ describe("createClass", function() {
           m[k]();  
         }
 
-        expect(modelInstanceMethods[k]).toHaveBeenCalled();
+        expect(modelInstanceMethods[k].calls.count()).toEqual(1);
       });      
     });
 
     it('has as class methods', function() {
       Object.keys(modelClassMethods).forEach(function(k) {
         Model[k]();  
-        expect(modelClassMethods[k]).toHaveBeenCalled();
+        expect(modelClassMethods[k].calls.count()).toEqual(1);
       });      
     });
   });
@@ -151,13 +151,13 @@ describe("createClass", function() {
 
     it('calls constructor ', function() {
       var t = new Table();
-      expect(tableInstanceMethods.init).toHaveBeenCalled();
+      expect(tableInstanceMethods.init.calls.count()).toEqual(1);
       expect(tableInstanceMethods.init.calls.first().object).toEqual(t);
     });
 
     it('calls super constructor', function() {
       var t = new Table();
-      expect(modelInstanceMethods.init).toHaveBeenCalled();
+      expect(modelInstanceMethods.init.calls.count()).toEqual(1);
       expect(modelInstanceMethods.init.calls.first().object).toEqual(t);
     });
 
@@ -184,7 +184,7 @@ describe("createClass", function() {
           t[k]();  
         }
 
-        expect(tableInstanceMethods[k]).toHaveBeenCalled();
+        expect(tableInstanceMethods[k].calls.count()).toEqual(1);
       }); 
     });
 
@@ -192,7 +192,8 @@ describe("createClass", function() {
       var t = new Table();
       var notRedefinedProps = ['test4'];
       notRedefinedProps.forEach(function (key) {
-        expect(t[key]).toEqual(modelInstanceMethods[key]);
+        t[key]();
+        expect(modelInstanceMethods[key]).toHaveBeenCalled();
       });
     });
 
@@ -201,8 +202,8 @@ describe("createClass", function() {
       var t = new Table();
       t.test();
 
-      expect(tableInstanceMethods.test).toHaveBeenCalled();
-      expect(modelInstanceMethods.test).toHaveBeenCalled();
+      expect(tableInstanceMethods.test.calls.count()).toEqual(1);
+      expect(modelInstanceMethods.test.calls.count()).toEqual(1);
       expect(modelInstanceMethods.test.calls.first().object).toEqual(t);
     });
 
@@ -210,7 +211,7 @@ describe("createClass", function() {
       var t = new Table();
       t.test2();
 
-      expect(tableInstanceMethods.test2).toHaveBeenCalled();
+      expect(tableInstanceMethods.test2.calls.count()).toEqual(1);
       expect(modelInstanceMethods.test2).not.toHaveBeenCalled();
     });
 
@@ -218,14 +219,15 @@ describe("createClass", function() {
     it('has class methods', function() {
        Object.keys(tableClassMethods).forEach(function(k) {
         Table[k]();  
-        expect(tableClassMethods[k]).toHaveBeenCalled();
+        expect(tableClassMethods[k].calls.count()).toEqual(1);
       });  
     });
 
     it('has not redefined parent class methods', function() {
       var notRedefinedProps = ['at'];
       notRedefinedProps.forEach(function (key) {
-        expect(Table[key]).toEqual(modelClassMethods[key]);
+        Table[key]();
+        expect(modelClassMethods[key]).toHaveBeenCalled();
       });
     });
 
@@ -233,7 +235,7 @@ describe("createClass", function() {
       var redefinedProps = ['all'];
       redefinedProps.forEach(function (key) {
         Table[key]();
-        expect(modelClassMethods[key]).toHaveBeenCalled();
+        expect(modelClassMethods[key].calls.count()).toEqual(1);
         expect(modelClassMethods[key].calls.first().object).toEqual(Table);
       });
     });
@@ -299,22 +301,22 @@ describe("createClass", function() {
       var t = new Table();
       t.test();
 
-      expect(extendedMethods.test).toHaveBeenCalled();
-      expect(tableInstanceMethods.test).toHaveBeenCalled();
-      expect(modelInstanceMethods.test).toHaveBeenCalled();
+      expect(extendedMethods.test.calls.count()).toEqual(1);
+      expect(tableInstanceMethods.test.calls.count()).toEqual(1);
+      expect(modelInstanceMethods.test.calls.count()).toEqual(1);
     });
 
     it('has method with super set to original method', function() {
       var t = new Table();
       t.test3();
-      expect(extendedMethods.test3).toHaveBeenCalled();
-      expect(tableInstanceMethods.test3).toHaveBeenCalled();
+      expect(extendedMethods.test3.calls.count()).toEqual(1);
+      expect(tableInstanceMethods.test3.calls.count()).toEqual(1);
     });
 
     it('has method with super set to original method', function() {
       var t = new Table();
       t.test2();
-      expect(extendedMethods.test2).toHaveBeenCalled();
+      expect(extendedMethods.test2.calls.count()).toEqual(1);
       expect(tableInstanceMethods.test2).not.toHaveBeenCalled();
     });
   });
@@ -374,39 +376,50 @@ describe("createClass", function() {
     it('has method with super set to original method and call all chain', function() {
       Table.all();
 
-      expect(extendedMethods.all).toHaveBeenCalled();
-      expect(tableClassMethods.all).toHaveBeenCalled();
-      expect(modelClassMethods.all).toHaveBeenCalled();
+      expect(extendedMethods.all.calls.count()).toEqual(1);
+      expect(tableClassMethods.all.calls.count()).toEqual(1);
+      expect(modelClassMethods.all.calls.count()).toEqual(1);
     });
 
     it('has method with super set to original method', function() {
       Table.findByPlayer();
 
-      expect(extendedMethods.findByPlayer).toHaveBeenCalled();
-      expect(tableClassMethods.findByPlayer).toHaveBeenCalled();
+      expect(extendedMethods.findByPlayer.calls.count()).toEqual(1);
+      expect(tableClassMethods.findByPlayer.calls.count()).toEqual(1);
     });
 
     it('has method with super set to original method', function() {
       Table.findByState();
 
-      expect(extendedMethods.findByState).toHaveBeenCalled();
+      expect(extendedMethods.findByState.calls.count()).toEqual(1);
       expect(tableClassMethods.findByState).not.toBeDefined();
     });
   });
   
   describe('inplace extended multiple times', function() {
 
-    function createExtendedMethods (time) {
+    function createExtendedClassMethods (time) {
       return (function (t) {
         return {
           all: function () {
-            console.log('all, extened ' + time +' times');
+            console.log('all, extened ' + t +' times');
             this._super();
           }
         };
       })(time);
-      
     }
+
+    function createExtendedInstanceMethods (time) {
+      return (function (t) {
+        return {
+          test: function () {
+            console.log('test, extened ' + t +' times');
+            this._super();
+          }
+        };
+      })(time);
+    }
+
  
     var Model;
     var modelInstanceMethods;
@@ -417,7 +430,8 @@ describe("createClass", function() {
     var tableClassMethods;
 
 
-    var methods;
+    var classMethods;
+    var instanceMethods;
 
     beforeEach(function () {
       console.log('---');
@@ -438,57 +452,102 @@ describe("createClass", function() {
       Table = createClass(Model, tableInstanceMethods, tableClassMethods);
 
       var times = 5;
-      methods = [ ];
+      
+      classMethods = [ ];
       for (var i = 0; i < times; i++) {
-        var m = createExtendedMethods(i);
-        spyOnAll(m);
-        Table.extendClass(m);
-        methods.push(m);
+        var cm = createExtendedClassMethods(i);
+        spyOnAll(cm);
+        Table.extendClass(cm);
+        classMethods.push(cm);
+      }
+
+      instanceMethods = [ ];
+      for (var j = 0; j < times; j++) {
+        var im = createExtendedInstanceMethods(j);
+        spyOnAll(im);
+        Table.extend(im);
+        instanceMethods.push(im);
       }
     });
 
-    it('class methoda can be extended', function () {
+
+
+    it('class methods can be extended multiple times', function () {
       Table.all();
 
-      expect(modelClassMethods.all).toHaveBeenCalled();
-      expect(tableClassMethods.all).toHaveBeenCalled();
+      expect(modelClassMethods.all.calls.count()).toEqual(1);
+      expect(tableClassMethods.all.calls.count()).toEqual(1);
 
-      for (var i = 0; i < methods.length; i++) {
-        expect(methods[i].all).toHaveBeenCalled();
+      for (var i = 0; i < classMethods.length; i++) {
+        expect(classMethods[i].all.calls.count()).toEqual(1);
       }
     });
+
+    it('instance methods can be extended multiple times', function () {
+      var t  = new Table();
+      t.test();
+
+      expect(modelInstanceMethods.test.calls.count()).toEqual(1);
+      expect(tableInstanceMethods.test.calls.count()).toEqual(1);
+
+      for (var i = 0; i < instanceMethods.length; i++) {
+        expect(instanceMethods[i].test.calls.count()).toEqual(1);
+      }
+
+    });
+  });
+
+  describe('errors', function() {
+    beforeEach(function () {
+
+    });
+
+    it('should throw an error with readable message when called super method but there wasn\'t any', function () {
+      
+      var extendedMethods = {
+        test: function () {
+          this._super();
+        }
+      };
+
+      spyOnAll(extendedMethods);
+
+      var A = createClass(null, {});
+      A.extend(extendedMethods);
+
+      var a = new A();      
+      expect(a.test).toThrow(new Error('No "super" method defined'));
+      
+    });
+
+    it('should throw an error with readable message when called super super method but there wasn\'t any', function () {
+      var methods = {
+        test: function () {
+          this._super();
+        }
+      };
+
+      var extendedMethods = {
+        test: function () {
+          this._super();
+        }
+      };
+
+      spyOnAll(methods);
+      spyOnAll(extendedMethods);
+
+      var A = createClass(null, methods);
+      A.extend(extendedMethods);
+
+      var a = new A();
+      expect(a.test).toThrow(new Error('No "super" method defined'));
+
+    });
+
+
   });
 });
 
-
-// var A = createClass(null, { 
-//   data: null,
-//   init: function (data) {
-//     this.data =  data || [1,2,3,4];
-//   },
-
-//   getLength: function () {
-//     return this.data.length;
-//   },
-// }, {
-//   createWith5: function (data) {
-//     return new this(data || [1,2,3,4,5]);
-//   }
-// });
-
-// var B = createClass(A, {
-//   init: function (data) {
-//     this._super(data);
-//   },
-
-//   getCoolnes: function () {
-//     return 'aaaa';
-//   }
-// }, {
-//   createWith5: function () {
-//     return this._super([5,5,5,5,5]);
-//   }
-// });
 
 
 

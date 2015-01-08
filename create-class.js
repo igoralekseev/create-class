@@ -8,6 +8,10 @@
     };
   }
 
+  function noSuper() {
+    throw new Error('No "super" method defined');
+  }
+
   function extend (dest, source) {
     for (var key in source) {
       if (source.hasOwnProperty(key)) {
@@ -15,22 +19,24 @@
         if (typeof sourceProp == 'function') {
           if (functionReserved.indexOf(key) > -1) {
             continue;
-          }  
-          if (dest[key]) {
-            //wrap
+          } 
+
+          var type = typeof dest[key];
+
+          // if we will replace method or undefined with method - we should wrap it
+          if (type == 'undefined' || type == 'function') {
             var originalFunc = dest[key];
             var newFunc = sourceProp;
-
             sourceProp = (function (of, nf) {
               return function () {
                 var oldSuper = this._super;
-                this._super = bind(of, this);
+                this._super = of ? bind(of, this) : noSuper;
                 var result = nf.apply(this, arguments);
                 this._super = oldSuper;
                 return result;
               };
-            })(dest[key], sourceProp); 
-          }   
+            })(originalFunc, sourceProp); 
+          }
         }
 
         dest[key] = sourceProp;
