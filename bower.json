@@ -1,6 +1,6 @@
 {
   "name": "create-class",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "create-class.js",
   "ignore": [
     ".jshintrc",
