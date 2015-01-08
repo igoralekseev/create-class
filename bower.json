@@ -4,7 +4,9 @@
   "main": "create-class.js",
   "ignore": [
     ".jshintrc",
-    "**/*.txt"
+    "**/*.txt",
+    "example.js",
+    "example.html"
   ],
   "dependencies": {},
   "devDependencies": {}

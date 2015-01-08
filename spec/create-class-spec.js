@@ -26,7 +26,10 @@ function createModelInstanceMethods () {
 
 function createModelClassMethods () {
   return {
-    all: function() {},
+    all: function() {
+      console.log('all from Model');
+
+    },
     at: function() {}
   };
 }
@@ -36,8 +39,8 @@ function createTableInstanceMethods () {
   return {
     // constructor
     init: function () { 
-      this._super();
       console.log('new Table');
+      this._super();
     },
 
     // instance methods
@@ -61,6 +64,7 @@ function createTableInstanceMethods () {
 function createTableClassMethods () {
   return {
     all: function () {
+      console.log('all from Table');
       this._super();
     }, 
 
@@ -389,38 +393,102 @@ describe("createClass", function() {
       expect(tableClassMethods.findByState).not.toBeDefined();
     });
   });
+  
+  describe('inplace extended multiple times', function() {
 
+    function createExtendedMethods (time) {
+      return (function (t) {
+        return {
+          all: function () {
+            console.log('all, extened ' + time +' times');
+            this._super();
+          }
+        };
+      })(time);
+      
+    }
+ 
+    var Model;
+    var modelInstanceMethods;
+    var modelClassMethods;
+
+    var Table;
+    var tableInstanceMethods;
+    var tableClassMethods;
+
+
+    var methods;
+
+    beforeEach(function () {
+      console.log('---');
+      modelInstanceMethods = createModelInstanceMethods();
+      modelClassMethods = createModelClassMethods();
+
+      spyOnAll(modelInstanceMethods);
+      spyOnAll(modelClassMethods);
+
+      Model = createClass(null, modelInstanceMethods, modelClassMethods);
+
+      tableInstanceMethods = createTableInstanceMethods();
+      tableClassMethods = createTableClassMethods();
+
+      spyOnAll(tableInstanceMethods);
+      spyOnAll(tableClassMethods);
+
+      Table = createClass(Model, tableInstanceMethods, tableClassMethods);
+
+      var times = 5;
+      methods = [ ];
+      for (var i = 0; i < times; i++) {
+        var m = createExtendedMethods(i);
+        spyOnAll(m);
+        Table.extendClass(m);
+        methods.push(m);
+      }
+    });
+
+    it('class methoda can be extended', function () {
+      Table.all();
+
+      expect(modelClassMethods.all).toHaveBeenCalled();
+      expect(tableClassMethods.all).toHaveBeenCalled();
+
+      for (var i = 0; i < methods.length; i++) {
+        expect(methods[i].all).toHaveBeenCalled();
+      }
+    });
+  });
 });
 
 
-var A = createClass(null, { 
-  data: null,
-  init: function (data) {
-    this.data =  data || [1,2,3,4];
-  },
+// var A = createClass(null, { 
+//   data: null,
+//   init: function (data) {
+//     this.data =  data || [1,2,3,4];
+//   },
 
-  getLength: function () {
-    return this.data.length;
-  },
-}, {
-  createWith5: function (data) {
-    return new this(data || [1,2,3,4,5]);
-  }
-});
+//   getLength: function () {
+//     return this.data.length;
+//   },
+// }, {
+//   createWith5: function (data) {
+//     return new this(data || [1,2,3,4,5]);
+//   }
+// });
 
-var B = createClass(A, {
-  init: function (data) {
-    this._super(data);
-  },
+// var B = createClass(A, {
+//   init: function (data) {
+//     this._super(data);
+//   },
 
-  getCoolnes: function () {
-    return 'aaaa';
-  }
-}, {
-  createWith5: function () {
-    return this._super([5,5,5,5,5]);
-  }
-});
+//   getCoolnes: function () {
+//     return 'aaaa';
+//   }
+// }, {
+//   createWith5: function () {
+//     return this._super([5,5,5,5,5]);
+//   }
+// });
 
 
 
