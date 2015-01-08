@@ -1,11 +1,12 @@
 create-class
 ============
 
-super simple helper to create classes, depends on lodash 1.0.0
+super simple helper to create classes with inheritance and extend them later.
 
 
 ```javascript
 
+// create class without superclass
 var Model = createClass(null, {
   // constructor
   init: function () { 
@@ -13,23 +14,11 @@ var Model = createClass(null, {
   },
 
   // instance methods 
-  data: function () {
-    console.log('data from model', this);
-  },
-
-  empty: function () {
-    console.log('empty from model', this);  
-  }
-
+  data: function () {}
 }, {
   // class methods
-  all: function () {
-    console.log('all! from model', this);
-  },
-
-  at: function () {
-    console.log('at! from model', this);
-  }
+  all: function () {},
+  at: function () {}
 });
 
 
@@ -37,30 +26,33 @@ var Model = createClass(null, {
 var Table = createClass(Model, { 
   // constructor
   init: function () {
-    console.log('constructor of Table', arguments);
+    // calls super constuctor - Model.prototype.init with context set to Table instance
+    this._super()
   },
 
   // instance methods 
-  test: function () {
-    console.log('test from table', this);
-    this._super.test.apply(this, arguments);
+  data: function () {
+    // calls super method - Model.prototype.data with context set to Table instance
+    this._super();
   }
 }, { 
   // class methods 
   at: function () {
-    console.log('at! from Table', this);
+    // calls class super method - Model.at with context set to Table
+    this._super()
   },
 
   findByPlayer: function () {}
 });
 
 
+
+// usage
 Table.all();
 Table.at(0);
 Table.findByPlayer();
 
 t = new Table();
 t.data();
-t.empty();
 
 ```

@@ -4,10 +4,10 @@
   "main": "create-class.js",
   "ignore": [
     ".jshintrc",
-    "**/*.txt"
+    "**/*.txt",
+    "spec"
   ],
   "dependencies": {
-    "lodash": ">=1.0.0"
   },
   "devDependencies": {
   }
