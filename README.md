@@ -1,7 +1,7 @@
 create-class
 ============
 
-super simple helper to create classes, no dependencies
+super simple helper to create classes, no dependencies [absolutely useless]
 
 
 ```javascript
